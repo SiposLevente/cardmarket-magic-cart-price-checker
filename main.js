@@ -31,10 +31,13 @@
     for (let indexShiplents = 0; indexShiplents < shipments.length; indexShiplents++) {
         let rows = shipments[indexShiplents].getElementsByTagName("tbody")[0].getElementsByTagName("tr");
         for (let indexRows = 0; indexRows < rows.length; indexRows++) {
-            const cardName = rows[indexRows].getAttribute("data-name").replace(/\s+/g, '-').replace(/,+/g, '').replace(/'+/g, '');
             const collection = rows[indexRows].getAttribute("data-expansion-name").replace(/\s+/g, '-').replace(/:/g, '');
-            displayPrice(collection, cardName, rows[indexRows]);
+            const cardName = rows[indexRows].getAttribute("data-name").replace(/\s+/g, '-').replace(/\(|\)|,|./g, '');
+            try {
+                displayPrice(collection, cardName.replace(/'+/g, ''), rows[indexRows]);
+            } catch (e) {
+                displayPrice(collection, cardName.replace(/'+/g, '-'), rows[indexRows]);
+            }
         }
     }
 })();
-
