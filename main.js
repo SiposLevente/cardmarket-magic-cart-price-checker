@@ -23,8 +23,7 @@
                 const pricesToCheck = priceArray.children.length < 5 ? priceArray.children.length : 5;
                 const lowestPrice = priceArray.children[0].getElementsByClassName("color-primary small text-end text-nowrap fw-bold")[1].innerHTML;
                 const highestPrice = priceArray.children[pricesToCheck].getElementsByClassName("color-primary small text-end text-nowrap fw-bold")[1].innerHTML;
-                const originalCardName = htmlElement.getElementsByClassName("name text-start d-none d-md-table-cell")[0].children[0].innerHTML;
-                htmlElement.getElementsByClassName("name text-start d-none d-md-table-cell")[0].children[0].innerHTML += "<br>(" + lowestPrice + "-" + highestPrice + ")";
+                htmlElement.getElementsByClassName("name text-start d-none d-md-table-cell")[0].children[0].innerHTML += "<br>( " + lowestPrice + " - " + highestPrice + " )";
             }
         });
     }
@@ -32,8 +31,8 @@
     for (let indexShiplents = 0; indexShiplents < shipments.length; indexShiplents++) {
         let rows = shipments[indexShiplents].getElementsByTagName("tbody")[0].getElementsByTagName("tr");
         for (let indexRows = 0; indexRows < rows.length; indexRows++) {
-            const cardName = rows[indexRows].getAttribute("data-name").replace(/\s+/g, '-');
-            const collection = rows[indexRows].getAttribute("data-expansion-name").replace(/\s+/g, '-');
+            const cardName = rows[indexRows].getAttribute("data-name").replace(/\s+/g, '-').replace(/,+/g, '').replace(/'+/g, '');
+            const collection = rows[indexRows].getAttribute("data-expansion-name").replace(/\s+/g, '-').replace(/:/g, '');
             displayPrice(collection, cardName, rows[indexRows]);
         }
     }
