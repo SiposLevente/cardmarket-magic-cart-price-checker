@@ -38,7 +38,7 @@ function getPrices() {
         let rows = shipments[indexShiplents].getElementsByTagName("tbody")[0].getElementsByTagName("tr");
         for (let indexRows = 0; indexRows < rows.length; indexRows++) {
             const collection = rows[indexRows].getAttribute("data-expansion-name").replace(/\s+/g, '-').replace(/:/g, '');
-            const cardName = rows[indexRows].getAttribute("data-name").replace(/\s+/g, '-').replace(/,+/g, '').replace(/\.+/g, '').replace(/\(|\)/g, '').replace(/\/\//g, '').replace(/--/g, '-');
+            const cardName = rows[indexRows].getAttribute("data-name").replace(/\s+/g, '-').replace(/,+/g, '').replace(/\.+/g, '').replace(/!/g, '').replace(/\(|\)/g, '').replace(/\/\//g, '').replace(/--/g, '-');
             console.log(cardName)
             displayPrice(collection, cardName.replace(/'+/g, ''), rows[indexRows], function (wasExecSuccessful) {
                 if (!wasExecSuccessful) {
