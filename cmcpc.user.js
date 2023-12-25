@@ -9,7 +9,19 @@
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
-function displayPrice(collection, name, htmlElement, callback) {
+const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
+const randomRange = (min, max) => Math.random() * (max - min) + min;
+let sleep_counter = 0;
+let card_counter = 0;
+let number_of_cards = document.getElementsByClassName("badge text-bg-success main-nav-badge")[0].innerHTML;
+let button = document.createElement("button");
+button.innerHTML = "Get Prices";
+button.classList += "btn btn-primary btn-sm btn-outline-primary";
+
+async function displayPrice(collection, name, htmlElement, callback) {
+    sleep_counter += 3000;
+    await sleep(randomRange(sleep_counter, sleep_counter + 5000));
+    console.log("started: " + name)
     GM_xmlhttpRequest({
         withCredentials: true,
         method: "GET",
@@ -28,14 +40,17 @@ function displayPrice(collection, name, htmlElement, callback) {
             } catch (e) {
                 callback(false);
             }
+            console.log("Finished: " + name);
+            card_counter++;
+            button.innerHTML = "Get Prices (" + card_counter + "/" + number_of_cards + ")";
         }
     });
 }
 
 function getPrices() {
     const shipments = document.getElementById("shipments-col").getElementsByClassName("table table-sm article-table mb-1 table-striped product-table");
-    for (let indexShiplents = 0; indexShiplents < shipments.length; indexShiplents++) {
-        let rows = shipments[indexShiplents].getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+    for (let indexShipments = 0; indexShipments < shipments.length; indexShipments++) {
+        let rows = shipments[indexShipments].getElementsByTagName("tbody")[0].getElementsByTagName("tr");
         for (let indexRows = 0; indexRows < rows.length; indexRows++) {
             const collection = rows[indexRows].getAttribute("data-expansion-name").replace(/\s+/g, '-').replace(/:/g, '');
             const cardName = rows[indexRows].getAttribute("data-name").replace(/\s+/g, '-').replace(/,+/g, '').replace(/\.+/g, '').replace(/!/g, '').replace(/\(|\)/g, '').replace(/\/\//g, '').replace(/--/g, '-');
@@ -50,9 +65,6 @@ function getPrices() {
 
 (function () {
     'use strict';
-    let button = document.createElement("button");
-    button.innerHTML = "Get Prices";
-    button.classList += "btn btn-primary btn-sm btn-outline-primary";
     button.addEventListener("click", getPrices, false)
     document.getElementsByClassName("card-body d-flex flex-column")[1].insertBefore(button, document.getElementsByClassName("card-body d-flex flex-column")[1].children[2]);
 })();
